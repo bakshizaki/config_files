@@ -6,6 +6,6 @@
 !.vimrc
 !.tmux.conf
 !.bashrc
-
+!README.md
 #..even if they are in subdirectories
 #!*/
