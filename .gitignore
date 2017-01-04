@@ -7,5 +7,6 @@
 !.tmux.conf
 !.bashrc
 !README.md
+!.vim/init.vim
 #..even if they are in subdirectories
 #!*/
