@@ -1,25 +1,44 @@
 "set shell=/bin/bash
+command! LoadSession if filereadable(expand("./Session.vim", 1)) | source ./Session.vim
+    \ | endif
+autocmd VimEnter * nested LoadSession
+autocmd VimLeave * NERDTreeClose
+autocmd VimEnter * if filereadable(expand("./Session.vim", 1)) | NERDTree | endif
+autocmd VimLeave * TlistClose
+autocmd VimEnter * if filereadable(expand("./Session.vim", 1)) | TlistOpen | endif
+autocmd VimEnter * wincmd h
+set nobackup
+set backupdir=~/tmp
 set ignorecase
 set smartcase
+set nohlsearch
 set tabstop=4
 set softtabstop=0 noexpandtab
 set shiftwidth=4
+set tags=./tags;/
 let mapleader = ';'
 ino jk <esc>
+ino JK <esc>
 cno jk <c-c>
-inoremap <C-;> <Right>
+cno JK <c-c>
 " Switching windows
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+map <leader>q :q<cr>
+"open C tag in split
+map <M-}> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+nnoremap <M-]> :execute "vertical ptag " . expand("<cword>")<CR> \| <C-w>l
+"set previewheight=85
 " Switching from terminal window
 tnoremap <C-h> <C-\><C-n><C-w>h
 tnoremap <C-j> <C-\><C-n><C-w>j
 tnoremap <C-k> <C-\><C-n><C-w>k
 tnoremap <C-l> <C-\><C-n><C-w>l
 tnoremap jk  <C-\><C-n>
-
+"automatically jgo to terminal mode when enter in a terminalj
+autocmd BufWinEnter,WinEnter term://* startinsert
 " copy and paste
 vmap <C-c> "+y
 vmap <C-x> "+c
@@ -29,11 +48,12 @@ nmap <C-v> "+p
 "open split right and bottom
 set splitbelow
 set splitright
+nmap <leader>h :set hls!<cr>
 " Enter newline in normal mode
-nmap <S-Enter> o<Esc>k
-nmap <CR> O<Esc>j
+"nmap <S-Enter> o<Esc>k
+"nmap <CR> O<Esc>j
 " Quick compile and run c++ programs
-nmap <leader>v :w \| !g++ % && ./a.out
+"nmap <leader>v :w \| !g++ % && ./a.out
 "------------Tabs------------
 
 "map <M-l> gt
@@ -82,8 +102,32 @@ nmap <leader>r :CtrlPMRU<cr>
 "------------CTRL P End-----------
 "------------Pluign Mappings-----------
 "nnoremap <F4> :GundoToggle<CR>
+"Ack settings dont open auto
+cnoreabbrev Ack Ack!
+nnoremap <Leader>a :Ack!<Space>
 nnoremap <F5> :NERDTreeToggle<CR>
+nnoremap <silent> <F8> :TlistToggle<CR>
+let g:NERDTreeWinSize=26
 map <Leader> <Plug>(easymotion-prefix)
+" cscope shortcuts -- 
+nnoremap <leader>fa :call CscopeFindInteractive(expand('<cword>'))<CR>
+nnoremap <leader>l :call ToggleLocationList()<CR>
+" s: Find this C symbol
+nnoremap  <leader>fs :call CscopeFind('s', expand('<cword>'))<CR>
+" g: Find this definition
+nnoremap  <leader>fg :call CscopeFind('g', expand('<cword>'))<CR>
+" d: Find functions called by this function
+nnoremap  <leader>fd :call CscopeFind('d', expand('<cword>'))<CR>
+" c: Find functions calling this function
+nnoremap  <leader>fc :call CscopeFind('c', expand('<cword>'))<CR>
+" t: Find this text string
+nnoremap  <leader>ft :call CscopeFind('t', expand('<cword>'))<CR>
+" e: Find this egrep pattern
+nnoremap  <leader>fe :call CscopeFind('e', expand('<cword>'))<CR>
+" f: Find this file
+nnoremap  <leader>ff :call CscopeFind('f', expand('<cword>'))<CR>
+" i: Find files #including this file
+nnoremap  <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
 "------------Pluign Mappings End-----------
 
 "------------Pluign Settings-----------
@@ -99,22 +143,55 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#buffer_idx_mode = 1
-set guifont=Meslo\ LG\ S\ for\ Powerline\ 11
+"set guifont=Meslo\ LG\ S\ for\ Powerline\ 11
+set guifont=Liberation\ Mono\ for\ Powerline\ 10
 colo desert
 let g:airline_theme='dark'
 set t_Co=256
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-" airline symbols
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = ''
+"if !exists('g:airline_symbols')
+    "let g:airline_symbols = {}
+"endif
+"" airline symbols
+"let g:airline_left_sep = ''
+"let g:airline_left_alt_sep = ''
+"let g:airline_right_sep = ''
+"let g:airline_right_alt_sep = ''
+"let g:airline_symbols.branch = ''
+"let g:airline_symbols.readonly = ''
+"let g:airline_symbols.linenr = ''
+
+"   YCM
+" http://stackoverflow.com/questions/3105307/how-do-you-automatically-remove-the-preview-window-after-autocompletion-in-vim
+" :h ins-completion.
+" :YcmDiags - errors
+"let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+"----------<<<<<<<<<<>>>>>>>>>>>>>>
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_show_diagnostics_ui = 0
+"autocmd CompleteDone * pclose
+highlight Pmenu ctermfg=15 ctermbg=0 guifg=#ffffff guibg=#000000
+let g:ycm_collect_identifiers_from_tags_files = 1
+set completeopt-=preview
+nnoremap <leader>yj :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <leader>yg :YcmCompleter GoTo<CR>
+nnoremap <leader>yi :YcmCompleter GoToImplementationElseDeclaration<CR>
+nnoremap <leader>yt :YcmCompleter GetTypeImprecise<CR>
+nnoremap <leader>yd :YcmCompleter GetDocImprecise<CR>
+nnoremap <leader>yf :YcmCompleter FixIt<CR>
+nnoremap <leader>yr :YcmCompleter GoToReferences<CR>
+nnoremap <leader>ys :YcmDiags<CR>
+nnoremap <leader>yD ::YcmForceCompileAndDiagnostics<CR>
+nnoremap <leader>yR :YcmRestartServer<CR>
+
+"Taglist show only one file tags
+let Tlist_Show_One_File = 1
+let Tlist_Use_Right_Window   = 1
 "------------Pluign Settings End-----------
+
+
+
+
+
 "------------------------Vundle----------------------------
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -145,7 +222,16 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'tpope/vim-repeat'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'altercation/vim-colors-solarized'
-
+Plugin 'brookhong/cscope.vim'
+Plugin 'dkprice/vim-easygrep'
+Plugin 'mileszs/ack.vim'
+Plugin 'rdnetto/YCM-Generator'
+Plugin 'vim-scripts/taglist.vim'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'yuttie/comfortable-motion.vim'
+Plugin 'tpope/vim-obsession'
+Plugin 'octol/vim-cpp-enhanced-highlight'
+Plugin 'abudden/taghighlight-automirror'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -248,7 +334,7 @@ if !exists(":DiffOrig")
 		  \ | wincmd p | diffthis
 endif
 
-colorscheme Monokai
+colorscheme solarized
 "To make Alt key work in terminal
 "let c='a'
 "while c <= 'z'
@@ -258,3 +344,8 @@ colorscheme Monokai
 "endw
 
 set timeout ttimeoutlen=50
+inoremap <C-l> <Right>
+inoremap <leader>; <C-o>A;
+"let g:solarized_termcolors=256
+""set background=dark
+"colorscheme solarized

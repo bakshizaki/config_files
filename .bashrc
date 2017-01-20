@@ -119,3 +119,7 @@ if ! shopt -oq posix; then
   fi
 fi
 alias tmux="TERM=screen-256color-bce tmux"
+if [ -f ~/.cdb ]; then
+    source ~/.cdb
+fi 
+set -o vi
