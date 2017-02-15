@@ -1,0 +1,10 @@
+reader release
+{
+lock_acquire(reader_lock);
+reader_count--;
+if(reader_count==0) {
+	resource.V()
+	cv_signal(reader_cv, reader_lock)
+}
+lock_release(reader_lock);
+}

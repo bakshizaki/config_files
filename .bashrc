@@ -118,6 +118,10 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/platform-tools/
 alias tmux="TERM=screen-256color-bce tmux"
 if [ -f ~/.cdb ]; then
     source ~/.cdb

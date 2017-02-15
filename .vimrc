@@ -15,7 +15,7 @@ set nohlsearch
 set tabstop=4
 set softtabstop=0 noexpandtab
 set shiftwidth=4
-set tags=./tags;/
+set tags=tags;/
 let mapleader = ';'
 ino jk <esc>
 ino JK <esc>
@@ -232,6 +232,7 @@ Plugin 'yuttie/comfortable-motion.vim'
 Plugin 'tpope/vim-obsession'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'abudden/taghighlight-automirror'
+Plugin 'airblade/vim-gitgutter'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -349,3 +350,5 @@ inoremap <leader>; <C-o>A;
 "let g:solarized_termcolors=256
 ""set background=dark
 "colorscheme solarized
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE=0
+set updatetime=250
