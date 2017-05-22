@@ -2,13 +2,10 @@ writer acquire
 {
 lock_acquire(writer_lock)
 writer_waiting++
+
+if(writer_waiting>1 or reader_count>0){
+	cv_wait(reader_cv,writer_lock)	;
+}
 lock_release(writer_lock)
 
-lock_acquire(reader_lock);
-if(readers_waiting>.0){
-	cv_wait(reader_cv,reader_lock)	;
-}
-lock_release(reader_lock);
-resource.P();
-writer_waiting--;
 }

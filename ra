@@ -12,8 +12,6 @@ lock_release(writer_lock);
 
 lock_acquire(reader_lock);
 reader_count++;
-if(reader_count == 1)
-	resource.P();
 reader_waiting--;
 lock_release(reader_lock);
 

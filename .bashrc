@@ -127,3 +127,6 @@ if [ -f ~/.cdb ]; then
     source ~/.cdb
 fi 
 set -o vi
+
+# added by Anaconda3 4.3.0 installer
+export PATH="/home/zaki/anaconda3/bin:$PATH"

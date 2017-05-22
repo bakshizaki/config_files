@@ -2,13 +2,10 @@ writer relase
 {
 lock_acquire(reader_lock);
 if(readers_waiting>.0){
-	lock_release(reader_lock);
-	lock_acquire(writer_lock)
-	cv_signal(writer_cv,writer_lock);
-	lock_release(writer_lock)
+	cv_signal(writer_cv,reader_lock);
 }
 else
-	lock_release(reader_lock);
+	cv_signal(reader_cv,reader_lock);
+lock_release(reader_lock);
 
-resource.V();
 }

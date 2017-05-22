@@ -8,6 +8,7 @@ autocmd VimLeave * TlistClose
 autocmd VimEnter * if filereadable(expand("./Session.vim", 1)) | TlistOpen | endif
 autocmd VimEnter * wincmd h
 set nobackup
+set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 set backupdir=~/tmp
 set ignorecase
 set smartcase
@@ -17,10 +18,10 @@ set softtabstop=0 noexpandtab
 set shiftwidth=4
 set tags=tags;/
 let mapleader = ';'
-ino jk <esc>
-ino JK <esc>
-cno jk <c-c>
-cno JK <c-c>
+ino jj <esc>
+ino JJ <esc>
+cno jj <c-c>
+cno JJ <c-c>
 " Switching windows
 map <C-h> <C-w>h
 map <C-j> <C-w>j
@@ -36,7 +37,7 @@ tnoremap <C-h> <C-\><C-n><C-w>h
 tnoremap <C-j> <C-\><C-n><C-w>j
 tnoremap <C-k> <C-\><C-n><C-w>k
 tnoremap <C-l> <C-\><C-n><C-w>l
-tnoremap jk  <C-\><C-n>
+tnoremap jj  <C-\><C-n>
 "automatically jgo to terminal mode when enter in a terminalj
 autocmd BufWinEnter,WinEnter term://* startinsert
 " copy and paste
@@ -53,7 +54,7 @@ nmap <leader>h :set hls!<cr>
 "nmap <S-Enter> o<Esc>k
 "nmap <CR> O<Esc>j
 " Quick compile and run c++ programs
-"nmap <leader>v :w \| !g++ % && ./a.out
+nmap <leader>v :w \| !g++ % && ./a.out
 "------------Tabs------------
 
 "map <M-l> gt
@@ -350,5 +351,5 @@ inoremap <leader>; <C-o>A;
 "let g:solarized_termcolors=256
 ""set background=dark
 "colorscheme solarized
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=0
+"let $NVIM_TUI_ENABLE_CURSOR_SHAPE=0
 set updatetime=250
